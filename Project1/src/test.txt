@@ -1,0 +1,7 @@
+1,dada
+2,3af
+4  // adasd
+.1000 //das
+1900 //dasda
+123 , adsd
+12, asd
