@@ -7,6 +7,7 @@
 #define MAX_ADDR 1999
 #define STRING_LENGTH 1024
 
+/* memory struct */
 typedef struct mem{
   int a[MAX_ADDR+1];
 } *ptr_mem;
@@ -20,7 +21,7 @@ read_mem (int addr, ptr_mem mem)
 int
 write_mem (int addr, ptr_mem mem, int data)
 {
-  if ((data & 0x00080000) != 0)
+  if ((data & 0x00080000) != 0) /* if negative number, sign extend */
     data = data | 0xFFF00000;
   mem->a[addr] = data;
 }
@@ -44,7 +45,7 @@ load_program(ptr_mem mem, char *filename)
       i = 0;
       while (fgets(str_buf, STRING_LENGTH, prog_txt) != NULL)
         {
-          if (str_buf[0] == '.') {
+          if (str_buf[0] == '.') { /* if current line is specifying an address */
             addr = atoi((char *)(str_buf+1));
             if (addr != -1)
               {
@@ -61,6 +62,7 @@ load_program(ptr_mem mem, char *filename)
   return i;
 }
 
+/* for debugging if program is loaded correctly */
 int
 print_program(ptr_mem mem)
 {
@@ -76,7 +78,7 @@ int
 run_memory(ptr_mem mem, int pipefd1[2], int pipefd2[2])
 {
   int *p = calloc(1, sizeof(int));
-  printf("Memory is online now:\n");
+  /* printf("Memory is online now:\n"); */
   *p = 0;
   write(pipefd2[1], p, sizeof(int));
 

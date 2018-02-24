@@ -16,8 +16,11 @@ int Y = 0;
 int mode = 0; /* 0: user, 1: system */
 int g_pipefd1[2], g_pipefd2[2];
 
+
 int cpu_read_mem (int addr); /* send read request to mem */
 int cpu_write_mem (int addr, int data); /* send write request to mem */
+
+/* define 31 instructions function */
 void load_value();
 void load_addr();
 void load_ind_addr();
@@ -52,9 +55,11 @@ void end(); /* 50 */
 void timer();
 void fetch();
 void execute();
-int init_cpu(int pipefd1[2], int pipefd2[2]);
-int running_cpu(int input_X);
 
+int init_cpu(int pipefd1[2], int pipefd2[2]); /* cpu routine initializer */
+int running_cpu(int input_X); /* cpu core loop */
+
+/* array of all instructions */
 void (*oper[51])(void) = {NULL,
                          load_value,
                          load_addr,
@@ -353,10 +358,10 @@ itr ()
   if (mode == 1)
     return;
   mode = 1;
-  cpu_write_mem(SYSTEM_STACK_ADDR - 1, SP);
+  cpu_write_mem(SYSTEM_STACK_ADDR - 1, SP); /* save user stack pointer */
   SP = SYSTEM_STACK_ADDR - 2;
-  cpu_write_mem(SP, PC);
-  PC = SYSTEM_CALL_ADDR;
+  cpu_write_mem(SP, PC); /* save PC */
+  PC = SYSTEM_CALL_ADDR; /* set PC to system call */
 }
 
 /* 30 */
@@ -384,11 +389,11 @@ timer()
 {
   if (mode == 1)
     return;
-  mode = 1;
-  cpu_write_mem(SYSTEM_STACK_ADDR - 1, SP);
-  SP = SYSTEM_STACK_ADDR - 2;
-  cpu_write_mem(SP, PC);
-  PC = TIMER_ADDR;
+  mode = 1; /* change to privilege mode */
+  cpu_write_mem(SYSTEM_STACK_ADDR - 1, SP); /* save user stack pointer */
+  SP = SYSTEM_STACK_ADDR - 2; /* decrement system stack pointer */
+  cpu_write_mem(SP, PC); /* save PC */
+  PC = TIMER_ADDR; /* set PC to timer handler */
 }
 
 /* fetch */
@@ -439,7 +444,7 @@ running_cpu(int input_X)
     {
       fetch();
       execute();
-      if (mode==0)
+      if (mode==0) /* only count in user mode */
         i++;
       if (input_X > 1 && i >= input_X)
         {

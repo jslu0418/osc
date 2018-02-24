@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/* not use in the final program */
 int
 running_interactive_cpu(int pipefd1[2], int pipefd2[2])
 {
@@ -53,11 +54,11 @@ main(int argc, char **argv)
       init_memory(prog_name, pipefd1, pipefd2);
       exit(0);
     default:
-      printf("This is parent process.\n");
+      /* printf("This is parent process.\n"); */
       init_cpu(pipefd1, pipefd2);
       running_cpu(input_X);
     }
   waitpid(-1, NULL, 0);
-  printf("Offline CPU.\n");
+  /* printf("Offline CPU.\n"); */
   return 0;
 }
