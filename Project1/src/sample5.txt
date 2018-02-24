@@ -7,7 +7,7 @@
 15      // copyfrom X Fst
 27      // push
 23      // call check current pos
-39
+43
 28      // pop
 14      // copyto X
 28      // pop
@@ -36,6 +36,10 @@
 14      // copyto X
 20      // jump to (copyfrom Y Fst)
 4
+1	// print new line
+10
+9
+2
 50      // end (50)
 17      // Function check if current pos (X, Y)is inside the circle // copyfrom Y
 27      // push
@@ -44,7 +48,7 @@
 10
 12      // Sub X, AC = 10 - X
 23      // call calculate square of AC
-79
+83
 14      // copyto X
 28      // pop
 16      // copyto Y
@@ -55,7 +59,7 @@
 10
 13      // Sub Y, AC = 10 - Y
 23      // call calculate square of AC
-79
+83
 14      // copyto X
 28      // pop AC (first square of AC)
 10      // AddX
@@ -64,9 +68,9 @@
 100     // 10 * 10
 12      // Sub X ( square of radius - X)
 23      // call check if AC >=0
-108
+112
 21      // jump if AC=0 (means AC>=0) print a asterisk
-74
+78
 1       // print space
 32
 9
@@ -79,9 +83,9 @@
 24      // return (24)
 27      // Function calculate square of AC // push AC
 23      // call check if AC >= 0
-108
+112
 21      // jumpto regular step if AC >=0
-91
+95
 28      // pop AC (else set AC = -AC)
 14      // copyto X
 1       // load 0
@@ -91,7 +95,7 @@
 27      // push X
 28      // pop X
 21      // jump to return if AC == 0
-107
+111
 14      // copyto X
 16      // copyto Y
 1       // Load zero
@@ -103,7 +107,7 @@
 27      // push AC
 15      // copyfrom X
 22      // jump to (pop AC) if dec X not zero
-99
+103
 28      // pop AC (make consistent)
 24      // return (24)
 14      // Function check if AC >=0 or AC < 0 // copyto X
@@ -113,11 +117,11 @@
 16      // copyto Y
 15      // copyfrom X (start of compare)
 21      // jump if zero to set AC = 0 (AC >= 0)
-129
+133
 27      // push AC(X)
 17      // copyfrom Y
 21      // jump if zero to set AC = 1 (AC < 0)
-132
+136
 14      // copyto X
 26      // dec X
 15      // copyfrom X
@@ -126,7 +130,7 @@
 14      // copyto X
 26      // dec X
 20      // jump to (start of compare)
-113
+117
 1       // set AC = 0
 0
 24      // return (24)
