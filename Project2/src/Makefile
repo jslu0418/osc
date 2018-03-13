@@ -90,9 +90,9 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_main_OBJECTS = main.$(OBJEXT) memory.$(OBJEXT) cpu.$(OBJEXT)
+am_main_OBJECTS = main.$(OBJEXT)
 main_OBJECTS = $(am_main_OBJECTS)
-main_LDADD = $(LDADD)
+main_DEPENDENCIES =
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -148,12 +148,12 @@ am__define_uniq_tagged_files = \
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project1/missing aclocal-1.13
+ACLOCAL = ${SHELL} /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project2/missing aclocal-1.13
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project1/missing autoconf
-AUTOHEADER = ${SHELL} /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project1/missing autoheader
-AUTOMAKE = ${SHELL} /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project1/missing automake-1.13
+AUTOCONF = ${SHELL} /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project2/missing autoconf
+AUTOHEADER = ${SHELL} /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project2/missing autoheader
+AUTOMAKE = ${SHELL} /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project2/missing automake-1.13
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
@@ -176,9 +176,9 @@ INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LDFLAGS = 
 LIBOBJS = 
-LIBS = 
+LIBS = -lpthread -lm 
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project1/missing makeinfo
+MAKEINFO = ${SHELL} /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project2/missing makeinfo
 MKDIR_P = /usr/bin/mkdir -p
 OBJEXT = o
 PACKAGE = full-package-name
@@ -193,10 +193,10 @@ SET_MAKE =
 SHELL = /bin/sh
 STRIP = 
 VERSION = VERSION
-abs_builddir = /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project1/src
-abs_srcdir = /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project1/src
-abs_top_builddir = /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project1
-abs_top_srcdir = /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project1
+abs_builddir = /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project2/src
+abs_srcdir = /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project2/src
+abs_top_builddir = /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project2
+abs_top_srcdir = /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project2
 ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
@@ -215,7 +215,7 @@ host_alias =
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project1/install-sh
+install_sh = ${SHELL} /home/012/j/jx/jxl173630/CS5348/Projects/osc/Project2/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -235,7 +235,8 @@ target_alias =
 top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
-main_SOURCES = main.c memory.c cpu.c
+main_SOURCES = main.c common.h
+main_LDADD = -lm -lpthread
 all: all-am
 
 .SUFFIXES:
@@ -323,9 +324,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/cpu.Po
 include ./$(DEPDIR)/main.Po
-include ./$(DEPDIR)/memory.Po
 
 .c.o:
 	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

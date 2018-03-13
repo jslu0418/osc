@@ -65,7 +65,7 @@
 10      // AddX
 14      // copyto X
 1       // load square of radius
-100     // 10 * 10
+10     // 10 * 10
 12      // Sub X ( square of radius - X)
 23      // call check if AC >=0
 112
