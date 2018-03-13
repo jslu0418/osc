@@ -1,3 +1,7 @@
+# Three source files are in the src subdir
+# src/main.c src/cpu.c src/memory.c
+# Five sample program files including the one I write are also in the src subdir
+# src/sample1.txt src/sample2.txt src/sample3.txt src/sample4.txt src/sample5.txt
 # How to compile & execute
 # Just in this directory use ./configure and make to prepare
 ./configure && make -k
