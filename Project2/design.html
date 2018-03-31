@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Design of Project2</title>
-<!-- 2018-03-12 Mon 20:04 -->
+<!-- 2018-03-30 Fri 18:43 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Jiashuai Lu" />
@@ -144,6 +144,7 @@ for the JavaScript code in this tag.
 <ul>
 <li><a href="#sec-1">1. Which Semaphores are Needed</a></li>
 <li><a href="#sec-2">2. Pseudocodes</a></li>
+<li><a href="#sec-3">3. Summary</a></li>
 </ul>
 </div>
 </div>
@@ -250,63 +251,81 @@ for the JavaScript code in this tag.
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
 
-<pre class="src src-C" id="ClinicSimulator"><span style="color: #ff0000;">/* </span><span style="color: #ff0000;">Clinic Simulator </span><span style="color: #ff0000;">*/</span>
-<span style="color: #00ff00;">semaphore</span> <span style="color: #ffff00;">nursecall</span><span style="color: #707183;">[</span>3<span style="color: #707183;">]</span> = <span style="color: #707183;">{</span>0<span style="color: #707183;">}</span>;
-<span style="color: #00ff00;">semaphore</span> <span style="color: #ffff00;">nursetell</span><span style="color: #707183;">[</span>3<span style="color: #707183;">]</span> = <span style="color: #707183;">{</span>0<span style="color: #707183;">}</span>;
+<pre class="src src-C" id="ClinicSimulator"><span style="color: #ffff00;">/* </span><span style="color: #ffff00;">Clinic Simulator </span><span style="color: #ffff00;">*/</span>
+<span style="color: #00ff00;">semaphore</span> <span style="color: #ffff00;">nursecall</span><span style="color: #8c8c8c;">[</span>3<span style="color: #8c8c8c;">]</span> = <span style="color: #8c8c8c;">{</span>0<span style="color: #8c8c8c;">}</span>;
+<span style="color: #00ff00;">semaphore</span> <span style="color: #ffff00;">nursetell</span><span style="color: #8c8c8c;">[</span>3<span style="color: #8c8c8c;">]</span> = <span style="color: #8c8c8c;">{</span>0<span style="color: #8c8c8c;">}</span>;
 <span style="color: #00ff00;">semaphore</span> <span style="color: #ffff00;">patients</span> = 0;
-<span style="color: #00ff00;">semaphore</span> <span style="color: #ffff00;">symptoms</span><span style="color: #707183;">[</span>30<span style="color: #707183;">]</span> = <span style="color: #707183;">{</span>0<span style="color: #707183;">}</span>;
-<span style="color: #00ff00;">semaphore</span> <span style="color: #ffff00;">finish_advising</span><span style="color: #707183;">[</span>30<span style="color: #707183;">]</span> = <span style="color: #707183;">{</span>0<span style="color: #707183;">}</span>;
-<span style="color: #00ff00;">semaphore</span> <span style="color: #ffff00;">finish_registering</span><span style="color: #707183;">[</span>30<span style="color: #707183;">]</span> = <span style="color: #707183;">{</span>0<span style="color: #707183;">}</span>;
-<span style="color: #00ff00;">semaphore</span> <span style="color: #ffff00;">leaves</span><span style="color: #707183;">[</span>30<span style="color: #707183;">]</span> = <span style="color: #707183;">{</span>0<span style="color: #707183;">}</span>;
-<span style="color: #00ff00;">semaphore</span> <span style="color: #ffff00;">waitingfordoctor</span><span style="color: #707183;">[</span>3<span style="color: #707183;">]</span> = <span style="color: #707183;">{</span>0<span style="color: #707183;">}</span>;
+<span style="color: #00ff00;">semaphore</span> <span style="color: #ffff00;">symptoms</span><span style="color: #8c8c8c;">[</span>30<span style="color: #8c8c8c;">]</span> = <span style="color: #8c8c8c;">{</span>0<span style="color: #8c8c8c;">}</span>;
+<span style="color: #00ff00;">semaphore</span> <span style="color: #ffff00;">finish_advising</span><span style="color: #8c8c8c;">[</span>30<span style="color: #8c8c8c;">]</span> = <span style="color: #8c8c8c;">{</span>0<span style="color: #8c8c8c;">}</span>;
+<span style="color: #00ff00;">semaphore</span> <span style="color: #ffff00;">finish_registering</span><span style="color: #8c8c8c;">[</span>30<span style="color: #8c8c8c;">]</span> = <span style="color: #8c8c8c;">{</span>0<span style="color: #8c8c8c;">}</span>;
+<span style="color: #00ff00;">semaphore</span> <span style="color: #ffff00;">leaves</span><span style="color: #8c8c8c;">[</span>30<span style="color: #8c8c8c;">]</span> = <span style="color: #8c8c8c;">{</span>0<span style="color: #8c8c8c;">}</span>;
+<span style="color: #00ff00;">semaphore</span> <span style="color: #ffff00;">waitingfordoctor</span><span style="color: #8c8c8c;">[</span>3<span style="color: #8c8c8c;">]</span> = <span style="color: #8c8c8c;">{</span>0<span style="color: #8c8c8c;">}</span>;
 <span style="color: #00ff00;">semaphore</span> <span style="color: #ffff00;">mutex1</span> = 1, <span style="color: #ffff00;">mutex2</span> = 1;
-<span style="color: #00ff00;">void</span> <span style="color: #0000ff; font-weight: bold;">receptionist</span><span style="color: #707183;">()</span>
-<span style="color: #707183;">{</span>
-    <span style="color: #00ffff; font-weight: bold;">while</span><span style="color: #7388d6;">(</span><span style="color: #ff00ff;">true</span><span style="color: #7388d6;">)</span>
-    <span style="color: #7388d6;">{</span>
-        wait<span style="color: #909183;">(</span>patients<span style="color: #909183;">)</span>;
-        dequeue_patients<span style="color: #909183;">(</span>patient_id<span style="color: #909183;">)</span>;
-        assign_doctor_to_patient<span style="color: #909183;">(</span>patient_id<span style="color: #909183;">)</span>;
-        signal<span style="color: #909183;">(</span>finish_registering<span style="color: #709870;">[</span>patient_id<span style="color: #709870;">]</span><span style="color: #909183;">)</span>;
-        signal<span style="color: #909183;">(</span>receptionist<span style="color: #909183;">)</span>;
-    <span style="color: #7388d6;">}</span>
-<span style="color: #707183;">}</span>
-<span style="color: #00ff00;">void</span> <span style="color: #0000ff; font-weight: bold;">doctor_and_nurse</span><span style="color: #707183;">()</span>
-<span style="color: #707183;">{</span>
-    <span style="color: #00ffff; font-weight: bold;">while</span><span style="color: #7388d6;">(</span><span style="color: #ff00ff;">true</span><span style="color: #7388d6;">)</span>
-    <span style="color: #7388d6;">{</span>
-        wait<span style="color: #909183;">(</span>waitingfordoctor<span style="color: #709870;">[</span>doctor_id<span style="color: #709870;">]</span><span style="color: #909183;">)</span>;
-        dequeue_patients_of_doctor_id<span style="color: #909183;">(</span>doctor_id, patient_id<span style="color: #909183;">)</span>;
-        signal<span style="color: #909183;">(</span>nursecall<span style="color: #709870;">[</span>doctor_id<span style="color: #709870;">]</span><span style="color: #909183;">)</span>;
-        wait<span style="color: #909183;">(</span>nursetell<span style="color: #709870;">[</span>doctor_id<span style="color: #709870;">]</span><span style="color: #909183;">)</span>;
-        wait<span style="color: #909183;">(</span>symptom<span style="color: #709870;">[</span>patient_id<span style="color: #709870;">]</span><span style="color: #909183;">)</span>;
-        advising<span style="color: #909183;">()</span>;
-        signal<span style="color: #909183;">(</span>finish_advising<span style="color: #709870;">[</span>patient_id<span style="color: #709870;">]</span><span style="color: #909183;">)</span>;
-    <span style="color: #7388d6;">}</span>
-<span style="color: #707183;">}</span>
-<span style="color: #00ff00;">void</span> <span style="color: #0000ff; font-weight: bold;">patient</span><span style="color: #707183;">()</span>
-<span style="color: #707183;">{</span>
-    enter_clinic<span style="color: #7388d6;">()</span>;
-    wait<span style="color: #7388d6;">(</span>mutex1<span style="color: #7388d6;">)</span>;
-    enqueue_patients<span style="color: #7388d6;">(</span>patient_id<span style="color: #7388d6;">)</span>;
-    signal<span style="color: #7388d6;">(</span>mutex1<span style="color: #7388d6;">)</span>;
-    wait<span style="color: #7388d6;">(</span>finish_registering<span style="color: #909183;">[</span>patient_id<span style="color: #909183;">]</span><span style="color: #7388d6;">)</span>;
-    signal<span style="color: #7388d6;">(</span>waitingfordoctor<span style="color: #909183;">[</span>doctor_id<span style="color: #909183;">]</span><span style="color: #7388d6;">)</span>;
-    wait<span style="color: #7388d6;">(</span>nursecall<span style="color: #909183;">[</span>doctor_id<span style="color: #909183;">]</span><span style="color: #7388d6;">)</span>;
-    walking_to_doctor_office<span style="color: #7388d6;">(</span>doctor_id<span style="color: #7388d6;">)</span>;
-    signal<span style="color: #7388d6;">(</span>symptom<span style="color: #909183;">[</span>patient_id<span style="color: #909183;">]</span><span style="color: #7388d6;">)</span>;
-    wait<span style="color: #7388d6;">(</span>finish_advising<span style="color: #909183;">[</span>patient_id<span style="color: #909183;">]</span><span style="color: #7388d6;">)</span>;
-    leave<span style="color: #7388d6;">()</span>;
-    signal<span style="color: #7388d6;">(</span>leaves<span style="color: #909183;">[</span>patient_id<span style="color: #909183;">]</span><span style="color: #7388d6;">)</span>;
-<span style="color: #707183;">}</span>
+<span style="color: #00ff00;">void</span> <span style="color: #0000ff; font-weight: bold;">receptionist</span><span style="color: #8c8c8c;">()</span>
+<span style="color: #8c8c8c;">{</span>
+    <span style="color: #00ffff; font-weight: bold;">while</span><span style="color: #93a8c6;">(</span><span style="color: #ff00ff;">true</span><span style="color: #93a8c6;">)</span>
+    <span style="color: #93a8c6;">{</span>
+        wait<span style="color: #b0b1a3;">(</span>patients<span style="color: #b0b1a3;">)</span>;
+        dequeue_patients<span style="color: #b0b1a3;">(</span>patient_id<span style="color: #b0b1a3;">)</span>;
+        assign_doctor_to_patient<span style="color: #b0b1a3;">(</span>patient_id<span style="color: #b0b1a3;">)</span>;
+        signal<span style="color: #b0b1a3;">(</span>finish_registering<span style="color: #97b098;">[</span>patient_id<span style="color: #97b098;">]</span><span style="color: #b0b1a3;">)</span>;
+    <span style="color: #93a8c6;">}</span>
+<span style="color: #8c8c8c;">}</span>
+<span style="color: #00ff00;">void</span> <span style="color: #0000ff; font-weight: bold;">doctor_and_nurse</span><span style="color: #8c8c8c;">()</span>
+<span style="color: #8c8c8c;">{</span>
+    <span style="color: #00ffff; font-weight: bold;">while</span><span style="color: #93a8c6;">(</span><span style="color: #ff00ff;">true</span><span style="color: #93a8c6;">)</span>
+    <span style="color: #93a8c6;">{</span>
+        wait<span style="color: #b0b1a3;">(</span>waitingfordoctor<span style="color: #97b098;">[</span>doctor_id<span style="color: #97b098;">]</span><span style="color: #b0b1a3;">)</span>;
+        dequeue_patients_of_doctor_id<span style="color: #b0b1a3;">(</span>doctor_id, patient_id<span style="color: #b0b1a3;">)</span>;
+        signal<span style="color: #b0b1a3;">(</span>nursecall<span style="color: #97b098;">[</span>doctor_id<span style="color: #97b098;">]</span><span style="color: #b0b1a3;">)</span>;
+        wait<span style="color: #b0b1a3;">(</span>nursetell<span style="color: #97b098;">[</span>doctor_id<span style="color: #97b098;">]</span><span style="color: #b0b1a3;">)</span>;
+        wait<span style="color: #b0b1a3;">(</span>symptom<span style="color: #97b098;">[</span>patient_id<span style="color: #97b098;">]</span><span style="color: #b0b1a3;">)</span>;
+        advising<span style="color: #b0b1a3;">()</span>;
+        signal<span style="color: #b0b1a3;">(</span>finish_advising<span style="color: #97b098;">[</span>patient_id<span style="color: #97b098;">]</span><span style="color: #b0b1a3;">)</span>;
+        wait<span style="color: #b0b1a3;">(</span>leaves<span style="color: #97b098;">[</span>patient_id<span style="color: #97b098;">]</span><span style="color: #b0b1a3;">)</span>;
+    <span style="color: #93a8c6;">}</span>
+<span style="color: #8c8c8c;">}</span>
+<span style="color: #00ff00;">void</span> <span style="color: #0000ff; font-weight: bold;">patient</span><span style="color: #8c8c8c;">()</span>
+<span style="color: #8c8c8c;">{</span>
+    enter_clinic<span style="color: #93a8c6;">()</span>;
+    wait<span style="color: #93a8c6;">(</span>mutex1<span style="color: #93a8c6;">)</span>;
+    enqueue_patients<span style="color: #93a8c6;">(</span>patient_id<span style="color: #93a8c6;">)</span>;
+    signal<span style="color: #93a8c6;">(</span>mutex1<span style="color: #93a8c6;">)</span>;
+    wait<span style="color: #93a8c6;">(</span>finish_registering<span style="color: #b0b1a3;">[</span>patient_id<span style="color: #b0b1a3;">]</span><span style="color: #93a8c6;">)</span>;
+    signal<span style="color: #93a8c6;">(</span>waitingfordoctor<span style="color: #b0b1a3;">[</span>doctor_id<span style="color: #b0b1a3;">]</span><span style="color: #93a8c6;">)</span>;
+    wait<span style="color: #93a8c6;">(</span>nursecall<span style="color: #b0b1a3;">[</span>doctor_id<span style="color: #b0b1a3;">]</span><span style="color: #93a8c6;">)</span>;
+    signal<span style="color: #93a8c6;">(</span>nursetell<span style="color: #b0b1a3;">[</span>doctor_id<span style="color: #b0b1a3;">]</span><span style="color: #93a8c6;">)</span>;
+    walking_to_doctor_office<span style="color: #93a8c6;">(</span>doctor_id<span style="color: #93a8c6;">)</span>;
+    signal<span style="color: #93a8c6;">(</span>symptom<span style="color: #b0b1a3;">[</span>patient_id<span style="color: #b0b1a3;">]</span><span style="color: #93a8c6;">)</span>;
+    wait<span style="color: #93a8c6;">(</span>finish_advising<span style="color: #b0b1a3;">[</span>patient_id<span style="color: #b0b1a3;">]</span><span style="color: #93a8c6;">)</span>;
+    leave<span style="color: #93a8c6;">()</span>;
+    signal<span style="color: #93a8c6;">(</span>leaves<span style="color: #b0b1a3;">[</span>patient_id<span style="color: #b0b1a3;">]</span><span style="color: #93a8c6;">)</span>;
+<span style="color: #8c8c8c;">}</span>
 </pre>
 </div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Summary</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+My clinic simulator uses three types of threads and nine different types of semaphores. In this clinic program, receptionist and doctor<sub>and</sub><sub>nurse</sub> threads are most likely as daemon threads which will keep on running in loop for serving incoming patients once started. Correspondingly, the patients do not belong to our clinic, so each of them would just come and go after they get their advice from doctors.
+</p>
+
+<p>
+The most difficult part of this project to me is designing the coordination between different threads to make the whole clinic is in operation regularly and each thread to perform their responsibilities successfully. At the very first I try to use more than thirteen types of semaphores in the design of my clinic. However, with the process of coding going, I realize that some of them are indeed redundant or meaningless or just incorrect. For example, I define the patients semaphore to denote how many patients are waiting for the receptionist to register for them. But I also define receptionist semaphore to let patients know a receptionist is available. In fact, this pair of semaphores are incorrect design in this project under the project description. The clinic does not has a hard limit for number of patients could be accommodated in clinic. Since the receptionist is a deamon thread, once it finishes register service for a patient, it will automatically be available for serving next patient's request. Thus, as long as we have a semaphore for waiting patients, we do not need to have another semaphore to let a patient know if a receptionist is able to serve her. Insteadly, we can just notice the patient that her registering is finished by signal another semahore, finishing<sub>registering</sub>.
+</p>
+
+<p>
+I will use a patient's view to go through the whole process of visiting a doctor. In the following explanation, we will assume a three doctor<sub>and</sub><sub>nurse</sub> threads (0, 1, 2), three patient threads (0, 1, 2), and one receptionist thread scenario. Suppose we are observing patient 1, when she just enter the clinic, she will enqueue her patient id into total patient queue. Due to multithreads' non-deterministic feature, even we start patients in the order 0, 1, 2, their patient ids can be insert in the queue in arbitrary order such as 1, 2, 0. Each of these patients will signal the semahore patients by increment it by 1. We also know the receptionist is waiting on this semaphore, after that the receptionist will dequeue the total patient queue and get patient id 1. Then we assume receptionist enqueue this id to doctor 2's (randomly choice) waiting<sub>patients</sub> queue, and signal finish<sub>registering[patient</sub><sub>id]</sub>. The patient will then signal waitingfordoctor[doctor<sub>id]</sub> to notice doctor<sub>and</sub><sub>nurse</sub> thread and wait for nursecall[doctor<sub>id]</sub>. After that her will follow the nurse to doctor 2's office, signal nursetell[doctor<sub>id]</sub> to let the doctor know she is in the office. Doctor 2 will then listen to her symptoms and giving his advice to her. After she leave the office, patient 1 thread signals leave[patient<sub>id]</sub> and doctor 2 waiting for this semaphore to finish this loop for serving next patient.
+</p>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jiashuai Lu</p>
-<p class="date">Created: 2018-03-12 Mon 20:04</p>
+<p class="date">Created: 2018-03-30 Fri 18:43</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"></p>
 </div>

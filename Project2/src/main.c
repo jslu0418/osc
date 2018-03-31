@@ -181,6 +181,7 @@ main (int argc, char **argv)
   struct p_thread_info *p_info = calloc(num_patients, sizeof(struct p_thread_info));
   r_info.pinfos = p_info;
   r_info.num_doctors = num_doctors;
+  /* create threads */
   pthread_create(&r_info.t_id, NULL, &receptionist, &r_info);
   for(i=0; i<num_doctors; i++)
     {
@@ -197,6 +198,7 @@ main (int argc, char **argv)
     {
       pthread_join(p_info[i].t_id, NULL);
     }
+  /* cancel daemon threads */
   pthread_cancel(r_info.t_id);
   for(i=0; i<num_doctors; i++)
     {
